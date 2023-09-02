@@ -1,0 +1,45 @@
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { TRANSACTIONS_REPOSITORY } from 'src/constants';
+import Transaction from '../entities/transaction.entity';
+import { UsersService } from 'src/users/services/users/users.service';
+import { SaveOptions } from 'sequelize';
+
+@Injectable()
+export default class TransactionsHooks implements OnModuleInit {
+  constructor(
+    @Inject(TRANSACTIONS_REPOSITORY)
+    private readonly transactionsRepo: typeof Transaction,
+    private readonly usersService: UsersService,
+  ) {}
+
+  onModuleInit() {
+    this.transactionsRepo.afterSave(
+      'update_balance',
+      async (trs: Transaction, options: SaveOptions<Transaction>) => {
+        if (!options.validate) {
+          return;
+        }
+
+        const rowsAffected = await this.usersService.updateBalance(
+          trs.userId,
+          trs.value,
+        );
+
+        if (rowsAffected === 0) {
+          const rowsAff = await this.transactionsRepo.destroy({
+            where: {
+              id: trs.id,
+            },
+          });
+          if (rowsAff === 0) {
+            throw new Error(
+              'No rows affected during balance update and failed to delete transaction',
+            );
+          }
+
+          throw new Error('No rows affected during balance update');
+        }
+      },
+    );
+  }
+}

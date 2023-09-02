@@ -4,9 +4,10 @@ import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt/jwt-auth.guard';
 import { databaseProviders } from './providers/database.provider';
+import { TransactionsModule } from './transactions/transactions.module';
 
 @Module({
-  imports: [UsersModule, AuthModule],
+  imports: [UsersModule, AuthModule, TransactionsModule],
   controllers: [],
   providers: [
     {

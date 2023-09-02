@@ -7,7 +7,10 @@ import {
   Unique,
   Model,
   AllowNull,
+  Default,
+  HasMany,
 } from 'sequelize-typescript';
+import Transaction from 'src/transactions/entities/transaction.entity';
 
 @Table
 export class User extends Model {
@@ -31,6 +34,10 @@ export class User extends Model {
   password: string;
 
   @AllowNull(false)
+  @Default(0)
   @Column
   balance: number;
+
+  @HasMany(() => Transaction)
+  transactions: Transaction[];
 }

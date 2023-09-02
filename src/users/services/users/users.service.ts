@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import sequelize from 'sequelize';
 import { USERS_REPOSITORY } from 'src/constants';
 import CreateUserDto from 'src/users/dto/create-user.dto';
 import { User } from 'src/users/entities/user.entity';
@@ -17,10 +18,22 @@ export class UsersService {
     });
   }
 
+  async updateBalance(userId: number, value: number): Promise<number> {
+    const rowsAffected = await this.usersRepo.update(
+      {
+        balance: sequelize.literal(`balance + ${value}`),
+      },
+      {
+        where: { id: userId },
+      },
+    );
+
+    return rowsAffected.at(0);
+  }
+
   async create(user: CreateUserDto): Promise<number> {
     const createdUser = await this.usersRepo.create({
       ...user,
-      balance: 0,
     });
 
     return createdUser.id;

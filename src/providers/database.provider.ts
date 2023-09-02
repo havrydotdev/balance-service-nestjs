@@ -1,5 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { Sequelize } from 'sequelize-typescript';
+import Transaction from 'src/transactions/entities/transaction.entity';
 import { User } from 'src/users/entities/user.entity';
 
 const logger = new Logger('Sequelize');
@@ -16,7 +17,7 @@ export const databaseProviders = [
         dialect: 'sqlite',
         host: './dev.sqlite',
       });
-      sequelize.addModels([User]);
+      sequelize.addModels([User, Transaction]);
       sequelize.options.logging = logSql;
       await sequelize.sync();
       return sequelize;
