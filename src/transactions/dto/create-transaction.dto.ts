@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsIn,
   IsNotEmpty,
@@ -8,6 +9,12 @@ import {
 } from 'class-validator';
 
 export class ReqCreateTransactionDto {
+  @ApiProperty({
+    required: true,
+    type: 'number',
+    title: 'value',
+    description: 'Value of transaction in EUR',
+  })
   @IsNumber()
   @NotEquals(0)
   @IsNotEmpty()

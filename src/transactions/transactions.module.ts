@@ -4,9 +4,10 @@ import { TransactionsController } from './controllers/transactions/transactions.
 import { transactionsRepository } from './repository/transactions.repository';
 import { UsersModule } from 'src/users/users.module';
 import TransactionsHooks from './hooks/transactions.hooks';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
-  imports: [UsersModule],
+  imports: [UsersModule, HttpModule],
   providers: [TransactionsService, transactionsRepository, TransactionsHooks],
   controllers: [TransactionsController],
 })

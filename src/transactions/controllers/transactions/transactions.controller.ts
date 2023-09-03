@@ -5,6 +5,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Query,
   Req,
 } from '@nestjs/common';
 import { FastifyRequest } from 'fastify';
@@ -81,15 +82,33 @@ export class TransactionsController {
   }
 
   @Get()
-  async getAllByUser(@Req() req: FastifyRequest): Promise<Transaction[]> {
-    return this.transactionsService.findAllByUser(req.user.id);
+  async getAllByUser(
+    @Req() req: FastifyRequest,
+    @Query('currency') curr: string,
+  ): Promise<Transaction[]> {
+    const transactions = await this.transactionsService.findAllByUser(
+      req.user.id,
+    );
+    if (curr) {
+      const res = await this.transactionsService.getRates(curr);
+      transactions.forEach((tr) => (tr.value *= res.rates[curr]));
+    }
+
+    return transactions;
   }
 
   @Get(':id')
   async getById(
     @Req() req: FastifyRequest,
     @Param('id', ParseIntPipe) id: number,
+    @Query('currency') curr: string,
   ): Promise<Transaction> {
-    return this.transactionsService.findById(id, req.user.id);
+    const tr = await this.transactionsService.findById(id, req.user.id);
+    if (curr) {
+      const res = await this.transactionsService.getRates(curr);
+      tr.value *= res[curr];
+    }
+
+    return tr;
   }
 }
