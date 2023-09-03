@@ -14,6 +14,7 @@ export class ReqCreateTransactionDto {
     type: 'number',
     title: 'value',
     description: 'Value of transaction in EUR',
+    example: 300,
   })
   @IsNumber()
   @NotEquals(0)
@@ -22,11 +23,25 @@ export class ReqCreateTransactionDto {
 }
 
 export class ReqCreateTransferDto {
+  @ApiProperty({
+    required: true,
+    type: 'number',
+    title: 'value',
+    description: 'Value of transaction in EUR',
+    example: 300,
+  })
   @IsNumber()
   @NotEquals(0)
   @IsNotEmpty()
   value: number;
 
+  @ApiProperty({
+    required: true,
+    type: 'number',
+    title: 'toId',
+    description: 'Id of transfer recepient',
+    example: 1,
+  })
   @IsNotEmpty()
   @NotEquals(0)
   @IsPositive()

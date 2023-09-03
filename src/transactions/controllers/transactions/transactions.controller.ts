@@ -8,6 +8,7 @@ import {
   Query,
   Req,
 } from '@nestjs/common';
+import { ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { FastifyRequest } from 'fastify';
 import {
   ReqCreateTransactionDto,
@@ -57,6 +58,9 @@ export class TransactionsController {
   }
 
   @Post('transfer')
+  @ApiResponse({
+    type: 'Transaction',
+  })
   async createTransfer(
     @Req() req: FastifyRequest,
     @Body() dto: ReqCreateTransferDto,
@@ -82,6 +86,13 @@ export class TransactionsController {
   }
 
   @Get()
+  @ApiQuery({
+    name: 'currency',
+    required: false,
+    example: 'UAH',
+    description:
+      'Currency that api will convert all transactions values to (defaults to EUR)',
+  })
   async getAllByUser(
     @Req() req: FastifyRequest,
     @Query('currency') curr: string,
@@ -98,6 +109,17 @@ export class TransactionsController {
   }
 
   @Get(':id')
+  @ApiQuery({
+    name: 'currency',
+    required: false,
+    example: 'UAH',
+    description:
+      'Currency that api will convert all transactions values to (defaults to EUR)',
+  })
+  @ApiResponse({
+    status: 200,
+    type: Transaction,
+  })
   async getById(
     @Req() req: FastifyRequest,
     @Param('id', ParseIntPipe) id: number,
