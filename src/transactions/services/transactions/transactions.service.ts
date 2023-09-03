@@ -10,8 +10,10 @@ export class TransactionsService {
     private readonly transactionsRepo: typeof Transaction,
   ) {}
 
-  async findAll(): Promise<Transaction[]> {
-    return this.transactionsRepo.findAll();
+  async findAllByUser(userId: number): Promise<Transaction[]> {
+    return this.transactionsRepo.findAll({
+      where: { userId: userId },
+    });
   }
 
   async findById(id: number, userId: number): Promise<Transaction> {
