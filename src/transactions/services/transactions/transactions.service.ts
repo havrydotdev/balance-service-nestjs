@@ -47,6 +47,9 @@ export class TransactionsService {
     const transaction = await this.transactionsRepo.findByPk(id);
 
     if (transaction.userId !== userId) {
+      this.logger.error(
+        `User does not own this transaction (expected userId to equal ${transaction.userId}, got ${userId})`,
+      );
       throw new UnauthorizedException({
         message: 'You don`t have access to this transaction',
       });

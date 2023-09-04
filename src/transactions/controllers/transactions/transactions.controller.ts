@@ -9,7 +9,6 @@ import {
   Post,
   Query,
   Req,
-  Res,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -19,7 +18,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { FastifyRequest, FastifyReply } from 'fastify';
+import { FastifyRequest } from 'fastify';
 import ErrorResponse from '../../../dto/error.dto';
 import {
   ReqCreateTransactionDto,
@@ -78,7 +77,6 @@ export class TransactionsController {
   @Post('debit')
   async createDebit(
     @Req() req: FastifyRequest,
-    @Res() res: FastifyReply,
     @Body() dto: ReqCreateTransactionDto,
   ): Promise<Transaction> {
     const debit = await this.transactionsService.create({

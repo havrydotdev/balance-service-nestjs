@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -12,6 +13,7 @@ import SignUserDto from '../../../auth/dto/sign-user.dto';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
@@ -40,6 +42,7 @@ export class AuthService {
     });
 
     if (!signPayload) {
+      this.logger.error(`Invalid credentials for user ${loginDto.email}`);
       throw new UnauthorizedException({
         message: 'Incorrect credentials',
       });
@@ -58,6 +61,7 @@ export class AuthService {
     regDto.password = encodePassword(regDto.password);
     const user = await this.usersService.findOne(regDto.email);
     if (user) {
+      this.logger.error(`User with email ${regDto.email} does already exist`);
       throw new BadRequestException({
         message: 'User with this email does already exist',
       });
