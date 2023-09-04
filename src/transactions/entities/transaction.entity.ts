@@ -67,11 +67,6 @@ export default class Transaction extends Model {
   @Column
   userId: number;
 
-  @ApiProperty({
-    type: () => User,
-    nullable: true,
-    description: "Transaction owner's id (isn't returned with transactions)",
-  })
   @BelongsTo(() => User)
   user: User;
 }

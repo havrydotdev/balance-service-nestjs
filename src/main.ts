@@ -17,6 +17,7 @@ async function bootstrap() {
     .setTitle('Balance service')
     .setDescription("Service for working with users' balance")
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

@@ -2,14 +2,25 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Post,
   Query,
   Req,
+  Res,
 } from '@nestjs/common';
-import { ApiQuery, ApiResponse } from '@nestjs/swagger';
-import { FastifyRequest } from 'fastify';
+import {
+  ApiBearerAuth,
+  ApiInternalServerErrorResponse,
+  ApiOkResponse,
+  ApiQuery,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
+import { FastifyRequest, FastifyReply } from 'fastify';
+import ErrorResponse from 'src/dto/error.dto';
 import {
   ReqCreateTransactionDto,
   ReqCreateTransferDto,
@@ -24,47 +35,73 @@ import {
   genTransferToDesc,
 } from 'src/utils/transaction-desc';
 
+@ApiBearerAuth()
+@ApiTags('transactions')
 @Controller('transactions')
+@ApiInternalServerErrorResponse({
+  type: () => ErrorResponse,
+  description: 'Something went wrong',
+})
+@ApiUnauthorizedResponse({
+  type: () => ErrorResponse,
+  description: 'User isn`t authorized',
+})
 export class TransactionsController {
   constructor(
     private readonly transactionsService: TransactionsService,
     private readonly usersService: UsersService,
   ) {}
 
+  @ApiOkResponse({
+    type: () => Transaction,
+  })
+  @HttpCode(HttpStatus.OK)
   @Post('top-up')
   async createTopUp(
     @Req() req: FastifyRequest,
+    @Res() res: FastifyReply,
     @Body() dto: ReqCreateTransactionDto,
-  ): Promise<Transaction> {
-    return this.transactionsService.create({
-      userId: req.user.id,
-      type: 'top-up',
-      desc: genTopUpDesc(dto.value),
-      value: dto.value,
-    });
+  ): Promise<void> {
+    res.send(
+      await this.transactionsService.create({
+        userId: req.user.id,
+        type: 'top-up',
+        desc: genTopUpDesc(dto.value),
+        value: dto.value,
+      }),
+    );
   }
 
+  @ApiOkResponse({
+    type: () => Transaction,
+  })
+  @HttpCode(HttpStatus.OK)
   @Post('debit')
   async createDebit(
     @Req() req: FastifyRequest,
+    @Res() res: FastifyReply,
     @Body() dto: ReqCreateTransactionDto,
-  ): Promise<Transaction> {
-    return this.transactionsService.create({
-      userId: req.user.id,
-      type: 'debit',
-      desc: genDebitDesc(dto.value),
-      value: -dto.value,
-    });
+  ): Promise<void> {
+    res.send(
+      await this.transactionsService.create({
+        userId: req.user.id,
+        type: 'debit',
+        desc: genDebitDesc(dto.value),
+        value: -dto.value,
+      }),
+    );
   }
 
-  @Post('transfer')
-  @ApiResponse({
-    type: 'Transaction',
+  @ApiOkResponse({
+    type: () => Transaction,
   })
+  @HttpCode(HttpStatus.OK)
+  @Post('transfer')
   async createTransfer(
     @Req() req: FastifyRequest,
+    @Res() res: FastifyReply,
     @Body() dto: ReqCreateTransferDto,
-  ): Promise<Transaction> {
+  ): Promise<void> {
     const from = await this.usersService.findById(req.user.id);
     const to = await this.usersService.findById(dto.toId);
 
@@ -82,10 +119,12 @@ export class TransactionsController {
       value: dto.value,
     });
 
-    return tr;
+    res.send(tr);
   }
 
-  @Get()
+  @ApiOkResponse({
+    type: () => [Transaction],
+  })
   @ApiQuery({
     name: 'currency',
     required: false,
@@ -93,10 +132,12 @@ export class TransactionsController {
     description:
       'Currency that api will convert all transactions values to (defaults to EUR)',
   })
+  @Get()
   async getAllByUser(
     @Req() req: FastifyRequest,
+    @Res() res: FastifyReply,
     @Query('currency') curr: string,
-  ): Promise<Transaction[]> {
+  ): Promise<void> {
     const transactions = await this.transactionsService.findAllByUser(
       req.user.id,
     );
@@ -105,10 +146,12 @@ export class TransactionsController {
       transactions.forEach((tr) => (tr.value *= res.rates[curr]));
     }
 
-    return transactions;
+    res.send(transactions);
   }
 
-  @Get(':id')
+  @ApiOkResponse({
+    type: () => Transaction,
+  })
   @ApiQuery({
     name: 'currency',
     required: false,
@@ -116,21 +159,19 @@ export class TransactionsController {
     description:
       'Currency that api will convert all transactions values to (defaults to EUR)',
   })
-  @ApiResponse({
-    status: 200,
-    type: Transaction,
-  })
+  @Get(':id')
   async getById(
     @Req() req: FastifyRequest,
+    @Res() res: FastifyReply,
     @Param('id', ParseIntPipe) id: number,
     @Query('currency') curr: string,
-  ): Promise<Transaction> {
+  ): Promise<void> {
     const tr = await this.transactionsService.findById(id, req.user.id);
     if (curr) {
       const res = await this.transactionsService.getRates(curr);
       tr.value *= res[curr];
     }
 
-    return tr;
+    res.send(tr);
   }
 }

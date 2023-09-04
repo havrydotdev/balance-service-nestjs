@@ -52,7 +52,7 @@ export class User extends Model {
     type: 'string',
     nullable: false,
     description: "User password (isn't returned in getProfile method)",
-    example: 'example@gmail.com',
+    example: 'secret_password',
   })
   @AllowNull(false)
   @Column
