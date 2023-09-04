@@ -8,11 +8,11 @@ import {
   Req,
   Res,
 } from '@nestjs/common';
-import LoginUserDto from 'src/auth/dto/login-user.dto';
-import { AuthService } from 'src/auth/services/auth/auth.service';
-import SignUserDto from 'src/auth/dto/sign-user.dto';
-import { Public } from 'src/auth/decorators/is-public.decorator';
-import CreateUserDto from 'src/users/dto/create-user.dto';
+import LoginUserDto from '../../../auth/dto/login-user.dto';
+import { AuthService } from '../../../auth/services/auth/auth.service';
+import SignUserDto from '../../../auth/dto/sign-user.dto';
+import { Public } from '../../../auth/decorators/is-public.decorator';
+import CreateUserDto from '../../../users/dto/create-user.dto';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   ApiInternalServerErrorResponse,
@@ -22,9 +22,9 @@ import {
   ApiHeader,
   ApiBearerAuth,
 } from '@nestjs/swagger';
-import TokenResponse from 'src/auth/dto/token.dto';
-import ErrorResponse from 'src/dto/error.dto';
-import RegisterResp from 'src/auth/dto/register-resp.dto';
+import TokenResponse from '../../../auth/dto/token.dto';
+import ErrorResponse from '../../../dto/error.dto';
+import RegisterResp from '../../../auth/dto/register-resp.dto';
 
 @ApiTags('auth')
 @Controller('auth')

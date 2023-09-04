@@ -11,7 +11,7 @@ import {
   Default,
   HasMany,
 } from 'sequelize-typescript';
-import Transaction from 'src/transactions/entities/transaction.entity';
+import Transaction from '../../transactions/entities/transaction.entity';
 
 @Table
 export class User extends Model {

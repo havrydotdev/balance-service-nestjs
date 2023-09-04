@@ -1,4 +1,4 @@
-import { TRANSACTIONS_REPOSITORY } from 'src/constants';
+import { TRANSACTIONS_REPOSITORY } from '../../constants';
 import Transaction from '../entities/transaction.entity';
 
 export const transactionsRepository = {

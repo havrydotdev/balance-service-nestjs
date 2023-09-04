@@ -1,7 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { Sequelize } from 'sequelize-typescript';
-import Transaction from 'src/transactions/entities/transaction.entity';
-import { User } from 'src/users/entities/user.entity';
+import Transaction from '../transactions/entities/transaction.entity';
+import { User } from '../users/entities/user.entity';
 
 const logger = new Logger('Sequelize');
 

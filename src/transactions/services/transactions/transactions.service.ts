@@ -6,9 +6,9 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { catchError, firstValueFrom } from 'rxjs';
-import { EXCHANGES_API_KEY, TRANSACTIONS_REPOSITORY } from 'src/constants';
-import CreateTransactionDto from 'src/transactions/dto/create-transaction.dto';
-import Transaction from 'src/transactions/entities/transaction.entity';
+import { EXCHANGES_API_KEY, TRANSACTIONS_REPOSITORY } from '../../../constants';
+import CreateTransactionDto from '../../../transactions/dto/create-transaction.dto';
+import Transaction from '../../../transactions/entities/transaction.entity';
 import { AxiosError } from 'axios';
 
 @Injectable()

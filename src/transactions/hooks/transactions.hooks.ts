@@ -1,7 +1,7 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
-import { TRANSACTIONS_REPOSITORY } from 'src/constants';
+import { TRANSACTIONS_REPOSITORY } from '../../constants';
 import Transaction from '../entities/transaction.entity';
-import { UsersService } from 'src/users/services/users/users.service';
+import { UsersService } from '../../users/services/users/users.service';
 import { SaveOptions } from 'sequelize';
 
 @Injectable()
