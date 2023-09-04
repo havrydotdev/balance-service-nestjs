@@ -59,17 +59,16 @@ export class TransactionsController {
   @Post('top-up')
   async createTopUp(
     @Req() req: FastifyRequest,
-    @Res() res: FastifyReply,
     @Body() dto: ReqCreateTransactionDto,
-  ): Promise<void> {
-    res.send(
-      await this.transactionsService.create({
-        userId: req.user.id,
-        type: 'top-up',
-        desc: genTopUpDesc(dto.value),
-        value: dto.value,
-      }),
-    );
+  ): Promise<Transaction> {
+    const topUp = await this.transactionsService.create({
+      userId: req.user.id,
+      type: 'top-up',
+      desc: genTopUpDesc(dto.value),
+      value: dto.value,
+    });
+
+    return topUp;
   }
 
   @ApiOkResponse({
@@ -81,15 +80,15 @@ export class TransactionsController {
     @Req() req: FastifyRequest,
     @Res() res: FastifyReply,
     @Body() dto: ReqCreateTransactionDto,
-  ): Promise<void> {
-    res.send(
-      await this.transactionsService.create({
-        userId: req.user.id,
-        type: 'debit',
-        desc: genDebitDesc(dto.value),
-        value: -dto.value,
-      }),
-    );
+  ): Promise<Transaction> {
+    const debit = await this.transactionsService.create({
+      userId: req.user.id,
+      type: 'debit',
+      desc: genDebitDesc(dto.value),
+      value: -dto.value,
+    });
+
+    return debit;
   }
 
   @ApiOkResponse({
@@ -99,9 +98,8 @@ export class TransactionsController {
   @Post('transfer')
   async createTransfer(
     @Req() req: FastifyRequest,
-    @Res() res: FastifyReply,
     @Body() dto: ReqCreateTransferDto,
-  ): Promise<void> {
+  ): Promise<Transaction> {
     const from = await this.usersService.findById(req.user.id);
     const to = await this.usersService.findById(dto.toId);
 
@@ -119,7 +117,7 @@ export class TransactionsController {
       value: dto.value,
     });
 
-    res.send(tr);
+    return tr;
   }
 
   @ApiOkResponse({
@@ -135,9 +133,8 @@ export class TransactionsController {
   @Get()
   async getAllByUser(
     @Req() req: FastifyRequest,
-    @Res() res: FastifyReply,
     @Query('currency') curr: string,
-  ): Promise<void> {
+  ): Promise<Transaction[]> {
     const transactions = await this.transactionsService.findAllByUser(
       req.user.id,
     );
@@ -146,7 +143,7 @@ export class TransactionsController {
       transactions.forEach((tr) => (tr.value *= res.rates[curr]));
     }
 
-    res.send(transactions);
+    return transactions;
   }
 
   @ApiOkResponse({
@@ -162,16 +159,15 @@ export class TransactionsController {
   @Get(':id')
   async getById(
     @Req() req: FastifyRequest,
-    @Res() res: FastifyReply,
     @Param('id', ParseIntPipe) id: number,
     @Query('currency') curr: string,
-  ): Promise<void> {
+  ): Promise<Transaction> {
     const tr = await this.transactionsService.findById(id, req.user.id);
     if (curr) {
       const res = await this.transactionsService.getRates(curr);
       tr.value *= res[curr];
     }
 
-    res.send(tr);
+    return tr;
   }
 }

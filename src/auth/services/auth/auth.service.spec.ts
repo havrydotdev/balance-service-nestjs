@@ -4,18 +4,11 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../../../users/services/users/users.service';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { encodePassword } from '../../..//utils/bcrypt';
-import { Sequelize } from 'sequelize-typescript';
+import getError from '../../..//utils/get-error';
+import { Test } from '@nestjs/testing';
+import { usersRepository } from '../../../users/repository/users.repository';
+import { Sequelize } from 'sequelize';
 import createMemDb from '../../../utils/mem-db';
-
-const getError = async <TError>(call: () => unknown): Promise<TError> => {
-  try {
-    await call();
-
-    throw new Error();
-  } catch (error: unknown) {
-    return error as TError;
-  }
-};
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -25,13 +18,17 @@ describe('AuthService', () => {
   let memDb: Sequelize;
 
   beforeAll(async () => {
-    jwtService = new JwtService();
+    const moduleRef = await Test.createTestingModule({
+      providers: [AuthService, UsersService, JwtService, usersRepository],
+    }).compile();
 
-    usersService = new UsersService(User);
+    jwtService = moduleRef.get<JwtService>(JwtService);
+
+    usersService = moduleRef.get<UsersService>(UsersService);
 
     memDb = await createMemDb();
 
-    service = new AuthService(usersService, jwtService);
+    service = moduleRef.get<AuthService>(AuthService);
   });
 
   it('should be defined', () => {
