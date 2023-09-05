@@ -20,7 +20,7 @@ const USERS_REPOSITORY = 'USERS_REPOSITORY';
 const TRANSACTIONS_REPOSITORY = 'TRANSACTIONS_REPOSITORY';
 
 const CSS_URL =
-  'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css';
+  'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.4.2/swagger-ui.min.css';
 
 export {
   jwtSecret,
