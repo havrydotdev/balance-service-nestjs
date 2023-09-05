@@ -3,6 +3,7 @@ import { Sequelize } from 'sequelize-typescript';
 import Transaction from '../transactions/entities/transaction.entity';
 import { User } from '../users/entities/user.entity';
 import { PG } from 'src/constants';
+import pg from 'pg';
 
 const logger = new Logger('Sequelize');
 
@@ -14,13 +15,8 @@ export const databaseProviders = [
   {
     provide: 'SEQUELIZE',
     useFactory: async () => {
-      const sequelize = new Sequelize({
-        dialect: 'postgres',
-        host: PG.HOST,
-        port: PG.PORT,
-        username: PG.USERNAME,
-        password: PG.PASWORD,
-        database: PG.DATABASE,
+      const sequelize = new Sequelize(PG.URL, {
+        dialectModule: pg,
         dialectOptions: {
           ssl: {
             require: true,

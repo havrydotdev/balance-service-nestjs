@@ -10,6 +10,7 @@ const PG = {
   USERNAME: process.env.POSTGRES_USER,
   PASWORD: process.env.POSTGRES_PASSWORD,
   DATABASE: process.env.POSTGRES_DATABASE,
+  URL: process.env.POSTGRES_URL,
 };
 
 const EXCHANGES_API_KEY = process.env.EXCHANGES_API_KEY;
