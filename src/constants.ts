@@ -19,10 +19,14 @@ const USERS_REPOSITORY = 'USERS_REPOSITORY';
 
 const TRANSACTIONS_REPOSITORY = 'TRANSACTIONS_REPOSITORY';
 
+const CSS_URL =
+  'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css';
+
 export {
   jwtSecret,
   PG,
   USERS_REPOSITORY,
   TRANSACTIONS_REPOSITORY,
   EXCHANGES_API_KEY,
+  CSS_URL,
 };
