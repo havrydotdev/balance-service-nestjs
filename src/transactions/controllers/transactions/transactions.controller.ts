@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -100,6 +101,11 @@ export class TransactionsController {
   ): Promise<Transaction> {
     const from = await this.usersService.findById(req.user.id);
     const to = await this.usersService.findById(dto.toId);
+    if (!to) {
+      throw new BadRequestException({
+        message: 'Receiver does not exist',
+      });
+    }
 
     const tr = await this.transactionsService.create({
       desc: genTransferToDesc(dto.value, to.name),
@@ -136,9 +142,10 @@ export class TransactionsController {
     const transactions = await this.transactionsService.findAllByUser(
       req.user.id,
     );
+
     if (curr) {
-      const res = await this.transactionsService.getRates(curr);
-      transactions.forEach((tr) => (tr.value *= res.rates[curr]));
+      const rate = await this.transactionsService.getRates(curr);
+      transactions.forEach((tr) => (tr.value *= rate));
     }
 
     return transactions;
@@ -162,8 +169,8 @@ export class TransactionsController {
   ): Promise<Transaction> {
     const tr = await this.transactionsService.findById(id, req.user.id);
     if (curr) {
-      const res = await this.transactionsService.getRates(curr);
-      tr.value *= res[curr];
+      const rate = await this.transactionsService.getRates(curr);
+      tr.value *= rate;
     }
 
     return tr;

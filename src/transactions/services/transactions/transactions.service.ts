@@ -1,7 +1,9 @@
 import { HttpService } from '@nestjs/axios';
 import {
+  HttpException,
   Inject,
   Injectable,
+  InternalServerErrorException,
   Logger,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -20,7 +22,7 @@ export class TransactionsService {
     private readonly httpService: HttpService,
   ) {}
 
-  async getRates(to: string) {
+  async getRates(to: string): Promise<number> {
     const response = await firstValueFrom(
       this.httpService
         .get(
@@ -29,12 +31,23 @@ export class TransactionsService {
         .pipe(
           catchError((error: AxiosError) => {
             this.logger.error(error.response.data);
-            throw 'An error happened!';
+            throw new InternalServerErrorException({
+              message: 'An error happened!',
+            });
           }),
         ),
     );
 
-    return response.data.rates;
+    if (response.data.error) {
+      throw new HttpException(
+        {
+          message: response.data.error.info,
+        },
+        response.data.status,
+      );
+    }
+
+    return response.data.rates[to];
   }
 
   async findAllByUser(userId: number): Promise<Transaction[]> {
