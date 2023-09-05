@@ -4,12 +4,12 @@ dotenv.config({ path: resolve(__dirname, '../.env') });
 
 const jwtSecret = process.env.JWT_SECRET;
 
-const pg = {
-  host: process.env.POSTGRES_HOST,
-  port: parseInt(process.env.POSTGRES_PORT),
-  username: process.env.POSTGRES_USER,
-  password: process.env.POSTGRES_PASSWORD,
-  database: process.env.POSTGRES_DATABASE,
+const PG = {
+  HOST: process.env.POSTGRES_HOST,
+  PORT: parseInt(process.env.POSTGRES_PORT),
+  USERNAME: process.env.POSTGRES_USER,
+  PASWORD: process.env.POSTGRES_PASSWORD,
+  DATABASE: process.env.POSTGRES_DATABASE,
 };
 
 const EXCHANGES_API_KEY = process.env.EXCHANGES_API_KEY;
@@ -20,7 +20,7 @@ const TRANSACTIONS_REPOSITORY = 'TRANSACTIONS_REPOSITORY';
 
 export {
   jwtSecret,
-  pg,
+  PG,
   USERS_REPOSITORY,
   TRANSACTIONS_REPOSITORY,
   EXCHANGES_API_KEY,
