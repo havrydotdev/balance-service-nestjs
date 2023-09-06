@@ -4,18 +4,20 @@ import {
   Logger,
   UnauthorizedException,
 } from '@nestjs/common';
-import LoginUserDto from '../../../auth/dto/login-user.dto.js';
-import { UsersService } from '../../../users/services/users/users.service.js';
-import { comparePasswords, encodePassword } from '../../../utils/bcrypt.js';
-import CreateUserDto from '../../../users/dto/create-user.dto.js';
-import SignUserDto from '../../../auth/dto/sign-user.dto.js';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { encodeJwt } = require('../../../../index.node');
+import { JwtService } from '@nestjs/jwt';
+import LoginUserDto from '../../../auth/dto/login-user.dto';
+import { UsersService } from '../../../users/services/users/users.service';
+import { comparePasswords, encodePassword } from '../../../utils/bcrypt';
+import CreateUserDto from '../../../users/dto/create-user.dto';
+import SignUserDto from '../../../auth/dto/sign-user.dto';
 
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private jwtService: JwtService,
+  ) {}
 
   async validateUser({
     email,
@@ -47,7 +49,7 @@ export class AuthService {
     }
 
     return {
-      access_token: encodeJwt({
+      access_token: this.jwtService.sign({
         id: signPayload.id,
         email: signPayload.email,
         name: signPayload.name,

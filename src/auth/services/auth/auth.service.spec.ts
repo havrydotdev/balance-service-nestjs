@@ -1,14 +1,14 @@
 import { AuthService } from './auth.service';
 import { User } from '../../..//users/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
-import { UsersService } from '../../../users/services/users/users.service.js';
+import { UsersService } from '../../../users/services/users/users.service';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
-import { encodePassword } from '../../..//utils/bcrypt.js';
-import getError from '../../..//utils/get-error.js';
+import { encodePassword } from '../../..//utils/bcrypt';
+import getError from '../../..//utils/get-error';
 import { Test } from '@nestjs/testing';
-import { usersRepository } from '../../../users/repository/users.repository.js';
+import { usersRepository } from '../../../users/repository/users.repository';
 import { Sequelize } from 'sequelize';
-import createMemDb from '../../../utils/mem-db.js';
+import createMemDb from '../../../utils/mem-db';
 
 describe('AuthService', () => {
   let service: AuthService;

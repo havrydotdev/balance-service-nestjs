@@ -20,20 +20,20 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { FastifyRequest } from 'fastify';
-import ErrorResponse from '../../../dto/error.dto.js';
+import ErrorResponse from '../../../dto/error.dto';
 import {
   ReqCreateTransactionDto,
   ReqCreateTransferDto,
-} from '../../../transactions/dto/create-transaction.dto.js';
-import Transaction from '../../../transactions/entities/transaction.entity.js';
-import { TransactionsService } from '../../../transactions/services/transactions/transactions.service.js';
-import { UsersService } from '../../../users/services/users/users.service.js';
+} from '../../../transactions/dto/create-transaction.dto';
+import Transaction from '../../../transactions/entities/transaction.entity';
+import { TransactionsService } from '../../../transactions/services/transactions/transactions.service';
+import { UsersService } from '../../../users/services/users/users.service';
 import {
   genDebitDesc,
   genTopUpDesc,
   genTransferFromDesc,
   genTransferToDesc,
-} from '../../../utils/transaction-desc.js';
+} from '../../../utils/transaction-desc';
 
 @ApiBearerAuth()
 @ApiTags('transactions')

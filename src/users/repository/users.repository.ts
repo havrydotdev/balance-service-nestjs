@@ -1,5 +1,5 @@
-import { USERS_REPOSITORY } from '../../constants.js';
-import { User } from '../entities/user.entity.js';
+import { USERS_REPOSITORY } from '../../constants';
+import { User } from '../entities/user.entity';
 
 export const usersRepository = {
   provide: USERS_REPOSITORY,
