@@ -41,3 +41,6 @@ test.sqlite
 # env secrets
 .env
 .env.local
+
+# rust target
+/target

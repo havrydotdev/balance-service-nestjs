@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize-typescript';
-import { User } from '../users/entities/user.entity';
-import Transaction from '../transactions/entities/transaction.entity';
+import { User } from '../users/entities/user.entity.js';
+import Transaction from '../transactions/entities/transaction.entity.js';
 
 const createMemDb = async (): Promise<Sequelize> => {
   const memDb = new Sequelize({

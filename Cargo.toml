@@ -1,0 +1,23 @@
+[package]
+name = "balance-service"
+version = "0.1.0"
+license = "ISC"
+edition = "2018"
+exclude = ["index.node"]
+
+[lib]
+crate-type = ["cdylib"]
+path = "addons/lib.rs"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+chrono = "0.4.29"
+dotenv = "0.15.0"
+jsonwebtoken = "7.0"
+serde = {version = "1.0", features = ["derive"] }
+
+[dependencies.neon]
+version = "0.10"
+default-features = false
+features = ["napi-6"]

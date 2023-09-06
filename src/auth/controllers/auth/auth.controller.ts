@@ -7,11 +7,11 @@ import {
   Post,
   Req,
 } from '@nestjs/common';
-import LoginUserDto from '../../../auth/dto/login-user.dto';
-import { AuthService } from '../../../auth/services/auth/auth.service';
-import SignUserDto from '../../../auth/dto/sign-user.dto';
-import { Public } from '../../../auth/decorators/is-public.decorator';
-import CreateUserDto from '../../../users/dto/create-user.dto';
+import LoginUserDto from '../../../auth/dto/login-user.dto.js';
+import { AuthService } from '../../../auth/services/auth/auth.service.js';
+import SignUserDto from '../../../auth/dto/sign-user.dto.js';
+import { Public } from '../../../auth/decorators/is-public.decorator.js';
+import CreateUserDto from '../../../users/dto/create-user.dto.js';
 import { FastifyRequest } from 'fastify';
 import {
   ApiInternalServerErrorResponse,
@@ -21,10 +21,10 @@ import {
   ApiHeader,
   ApiBearerAuth,
 } from '@nestjs/swagger';
-import TokenResponse from '../../../auth/dto/token.dto';
-import ErrorResponse from '../../../dto/error.dto';
-import RegisterResp from '../../../auth/dto/register-resp.dto';
-import { CustomUser } from 'types/fastify';
+import TokenResponse from '../../../auth/dto/token.dto.js';
+import ErrorResponse from '../../../dto/error.dto.js';
+import RegisterResp from '../../../auth/dto/register-resp.dto.js';
+import { CustomUser } from 'types/fastify.js';
 
 @ApiTags('auth')
 @Controller('auth')

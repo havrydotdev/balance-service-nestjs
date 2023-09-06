@@ -1,5 +1,7 @@
 import * as dotenv from 'dotenv';
 import { resolve } from 'path';
+import pg from 'pg';
+
 dotenv.config({ path: resolve(__dirname, '../.env') });
 
 const jwtSecret = process.env.JWT_SECRET;
@@ -19,8 +21,36 @@ const USERS_REPOSITORY = 'USERS_REPOSITORY';
 
 const TRANSACTIONS_REPOSITORY = 'TRANSACTIONS_REPOSITORY';
 
-const CSS_URL =
-  'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.4.2/swagger-ui.min.css';
+const CUSTOM_CSS = [
+  'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.4.2/swagger-ui.min.css',
+  'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.4.2/swagger-ui-standalone-preset.min.css',
+  'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.4.2/swagger-ui.css',
+];
+
+const CUSTOM_JS = [
+  'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.4.2/swagger-ui-bundle.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.4.2/swagger-ui-standalone-preset.min.js',
+];
+
+const PROD_DB = [
+  PG.URL,
+  {
+    dialectModule: pg,
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+    },
+  },
+];
+
+const DEV_DB = {
+  dialect: 'sqlite' as const,
+  host: './dev.sqlite',
+};
+
+const IS_PROD = !!process.env.PROD;
 
 export {
   jwtSecret,
@@ -28,5 +58,9 @@ export {
   USERS_REPOSITORY,
   TRANSACTIONS_REPOSITORY,
   EXCHANGES_API_KEY,
-  CSS_URL,
+  CUSTOM_CSS,
+  CUSTOM_JS,
+  PROD_DB,
+  DEV_DB,
+  IS_PROD,
 };
